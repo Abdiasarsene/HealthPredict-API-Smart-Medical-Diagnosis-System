@@ -2,7 +2,7 @@
 
 **HealthPredict** est une application IA de diagnostic médical qui prédit des maladies et propose des traitements en temps réel, basée sur des modèles de machine learning déployés via une API RESTful.
 
-![VSCode Screenshot](./images/code_screenshot.png)  
+![VSCode Screenshot](./static/py.png)  
 *Code source de l'application dans VSCode*
 
 ## Fonctionnalités clés
@@ -24,7 +24,7 @@
 | **Database**    | PostgreSQL                           |
 | **Infra**       | Docker, Docker-Compose               |
 
-![MLflow Dashboard](./images/mlflow_screenshot.png)  
+![MLflow Dashboard](./static/mlflow.png)  
 *Suivi des expériences ML dans MLflow*
 
 ## Modèles Implementés
@@ -37,3 +37,35 @@
 | SVM                  | 90%      | Cas marginaux                |
 
 ## Architecture
+
+### Détails des répertoires :
+
+- **amin.py** : Contient le code FastAPI pour l'API de prédiction.
+- **models/** : Contient les modèles entraînés pour effectuer les prédictions.
+- **notebook/** : Dossier dédié au suivi des expériences et à la gestion des modèles avec MLflow.
+- **static** : Dossier dédié aux images
+- **app.py** : Interface Streamlit pour la visualisation interactive des données médicales (optionnel).
+- **docker-compose.yml** : Configuration Docker pour déployer l'application.
+
+
+## Déploiement
+
+### Prérequis
+- Docker 20+
+- Docker-Compose 1.29+
+
+### Lancer l'application
+```bash
+git clone https://github.com/votreuser/HealthPredict.git
+cd HealthPredict
+docker-compose up --build
+
+
+## Installation
+
+### Avec Docker (Recommandé)
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/votre_utilisateur/healthpredict.git
+   cd healthpredict

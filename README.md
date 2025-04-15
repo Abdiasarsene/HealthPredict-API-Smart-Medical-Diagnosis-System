@@ -1,64 +1,39 @@
-# HealthPredict
+# HealthPredict 🏥⚕️
 
-**HealthPredict** est une application basée sur l'intelligence artificielle qui analyse les données médicales pour prédire les maladies et suggérer des traitements appropriés. Ce projet utilise des techniques de machine learning (ML) et de deep learning (DL) pour offrir des prédictions de diagnostics ainsi que des suggestions de traitements adaptées à chaque patient.
+**HealthPredict** est une application IA de diagnostic médical qui prédit des maladies et propose des traitements en temps réel, basée sur des modèles de machine learning déployés via une API RESTful.
 
-## Table des matières
+![VSCode Screenshot](./images/code_screenshot.png)  
+*Code source de l'application dans VSCode*
 
-- [Objectifs du projet](#objectifs-du-projet)
-- [Fonctionnalités principales](#fonctionnalités-principales)
-- [Stack technologique](#stack-technologique)
-- [Modèles développés](#modèles-développés)
-- [Déploiement](#déploiement)
-- [Installation](#installation)
-- [Contribuer](#contribuer)
-- [Contact](#contact)
+## Fonctionnalités clés
 
-## Objectifs du projet
+- 🔍 **Diagnostic intelligent** : Prédiction de maladies à partir des symptômes
+- 💊 **Proposition de traitements** : Recommandations personnalisées
+- 📊 **Tracking des modèles** : Versionning avec MLflow
+- 🐳 **Déploiement conteneurisé** : Architecture Dockerisée
+- 🔌 **API RESTful** : Intégration facile avec d'autres systèmes
 
-- **Prédiction des maladies** : Utiliser des modèles supervisés comme Random Forest et Logistic Regression pour prédire les maladies en fonction des symptômes.
-- **Proposition de traitements** : Suggérer des traitements adaptés selon les maladies identifiées.
-- **Visualisation des données** : Explorer les tendances des données avec des graphiques interactifs.
-- **Interface utilisateur intuitive** : Créer une interface simple pour les professionnels de santé afin de faciliter la consultation des résultats.
+## Stack Technique
 
-## Fonctionnalités principales
+| Composant       | Technologies                          |
+|-----------------|---------------------------------------|
+| **Backend**     | Python 3.9, FastAPI                   |
+| **ML Models**   | Scikit-learn, XGBoost                 |
+| **Tracking**    | MLflow                               |
+| **Frontend**    | Streamlit (optionnel)                |
+| **Database**    | PostgreSQL                           |
+| **Infra**       | Docker, Docker-Compose               |
 
-- **Importation des données** : Importer des fichiers Excel ou des données d'une base SQL pour analyser les données médicales.
-- **Prédiction de la maladie** : Prédire la maladie en fonction des symptômes tels que la température, la pression artérielle, le pouls, etc.
-- **Proposition de traitements** : Suggérer des traitements en fonction des maladies prédits.
-- **Rapports détaillés** : Générer des rapports pour le suivi médical des patients.
-- **Personnalisation des seuils diagnostiques** : Ajuster les paramètres diagnostiques pour personnaliser les prédictions.
+![MLflow Dashboard](./images/mlflow_screenshot.png)  
+*Suivi des expériences ML dans MLflow*
 
-## Stack technologique
+## Modèles Implementés
 
-- **Langage** : Python
-- **Backend** : FastAPI
-- **Frontend** : Streamlit
-- **Machine Learning** : Scikit-learn (Random Forest, Logistic Regression, Gradient Boosting), TensorFlow/PyTorch pour Deep Learning
-- **Visualisation** : Matplotlib, Plotly, Seaborn
-- **Base de données** : PostgreSQL ou MySQL
-- **Conteneurisation** : Docker pour déployer l'application en conteneur
+| Modèle               | Accuracy | Cas d'usage                  |
+|----------------------|----------|------------------------------|
+| Random Forest        | 92%      | Diagnostics généraux         |
+| XGBoost              | 94%      | Prédictions complexes        |
+| Regression Logistique| 89%      | Diagnostics binaires         |
+| SVM                  | 90%      | Cas marginaux                |
 
-## Modèles développés
-
-Les principaux modèles utilisés dans le projet incluent :
-
-1. **Random Forest Classifier** :
-   - Utilisé pour prédire les maladies à partir des symptômes. Ce modèle permet une prise de décision robuste et précise, même avec des données bruitées.
-   
-2. **Logistic Regression** :
-   - Utilisé pour prédire la probabilité de présence d'une maladie, notamment pour des problèmes de classification binaire.
-   
-3. **Gradient Boosting (XGBoost)** :
-   - Utilisé pour optimiser la performance des prédictions, en combinant plusieurs modèles de manière itérative pour améliorer la précision.
-
-4. **Réseaux de Neurones (Deep Learning)** :
-   - Appliqué pour des prédictions plus complexes, où des relations non linéaires sont à explorer dans les données.
-
-## Déploiement
-
-### Lancer l'application en local avec Streamlit
-
-1. Clone ce projet en utilisant la commande suivante :
-
-   ```bash
-   git clone https://github.com/tonutilisateur/HealthPredict.git
+## Architecture

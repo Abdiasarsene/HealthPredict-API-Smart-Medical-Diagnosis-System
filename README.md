@@ -97,7 +97,7 @@ Content-Type: application/json
 
 ```json
 {
-  "Diagnostic": "Le patient souffre de la Grippe."
+  "Diagnostic": "Le patient souffre de l'Asthme."
 }
 ```
 

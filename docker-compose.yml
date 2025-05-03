@@ -1,0 +1,12 @@
+services:
+  healthpredict:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile  # <-- chemin vers le Dockerfile
+    container_name: health_predict_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - MLFLOW_TRACKING_URI=file:/app/mlruns

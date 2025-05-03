@@ -1,0 +1,8 @@
+# created by virtualenv automatically
+__pycache__/
+
+# Environnement virtuel
+explore/
+static/
+# Mlflow 
+mlruns/

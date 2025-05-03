@@ -1,71 +1,128 @@
-# HealthPredict 🏥⚕️
+# 🩺 Prediction des Maladies et Proposition de Traitement
 
-**HealthPredict** est une application IA de diagnostic médical qui prédit des maladies et propose des traitements en temps réel, basée sur des modèles de machine learning déployés via une API RESTful.
+Ce projet propose une **API intelligente** construite avec **FastAPI** pour **prédire des maladies** à partir de données médicales de patients. L'application repose sur un **modèle de machine learning** (Logistic Regression) géré via **MLflow**, et peut facilement être déployée grâce à **Docker**.
 
-![VSCode Screenshot](./static/py.png)  
-*Code source de l'application dans VSCode*
+## 🚀 Objectifs
 
-## Fonctionnalités clés
+- Prédire automatiquement une maladie probable à partir de données physiologiques.
+- Fournir un diagnostic lisible pour les professionnels de santé.
+- Faciliter le déploiement grâce à Docker et docker-compose.
+- Préparer une base pour intégrer à terme des recommandations de traitement.
 
-- 🔍 **Diagnostic intelligent** : Prédiction de maladies à partir des symptômes
-- 💊 **Proposition de traitements** : Recommandations personnalisées
-- 📊 **Tracking des modèles** : Versionning avec MLflow
-- 🐳 **Déploiement conteneurisé** : Architecture Dockerisée
-- 🔌 **API RESTful** : Intégration facile avec d'autres systèmes
+---
 
-## Stack Technique
+## 🧠 Modèle utilisé
 
-| Composant       | Technologies                          |
-|-----------------|---------------------------------------|
-| **Backend**     | Python 3.9, FastAPI                   |
-| **ML Models**   | Scikit-learn, XGBoost                 |
-| **Tracking**    | MLflow                               |
-| **Frontend**    | Streamlit (optionnel)                |
-| **Database**    | PostgreSQL                           |
-| **Infra**       | Docker, Docker-Compose               |
+- **Type** : Régression Logistique
+- **Outil de gestion** : [MLflow](https://mlflow.org/)
+- **Suivi de version** : Activé via un dossier local `mlruns/`
 
-![MLflow Dashboard](./static/mlflow.png)  
-*Suivi des expériences ML dans MLflow*
+---
 
-## Modèles Implementés
+## 📊 Données d'entrée attendues
 
-| Modèle               | Accuracy | Cas d'usage                  |
-|----------------------|----------|------------------------------|
-| Random Forest        | 92%      | Diagnostics généraux         |
-| XGBoost              | 94%      | Prédictions complexes        |
-| Regression Logistique| 89%      | Diagnostics binaires         |
-| SVM                  | 90%      | Cas marginaux                |
+L'API reçoit les données suivantes au format JSON :
 
-## Architecture
+| Champ              | Type    | Description                          |
+|--------------------|---------|--------------------------------------|
+| `Temperature`       | float   | Température corporelle (°C)          |
+| `Pulse`             | float   | Pouls (battements/minute)            |
+| `BloodPressure`     | float   | Pression artérielle (mmHg)           |
+| `SpO2`              | float   | Saturation en oxygène (%)            |
+| `RespiratoryRate`   | float   | Fréquence respiratoire               |
+| `BMI`               | float   | Indice de Masse Corporelle           |
+| `FastingGlucose`    | float   | Glycémie à jeun (mg/dL)              |
+| `Cholesterol`       | float   | Taux de cholestérol (mg/dL)          |
+| `StressLevel`       | float   | Niveau de stress (échelle de 0 à 10) |
 
-### Détails des répertoires :
+---
 
-- **amin.py** : Contient le code FastAPI pour l'API de prédiction.
-- **models/** : Contient les modèles entraînés pour effectuer les prédictions.
-- **notebook/** : Dossier dédié au suivi des expériences et à la gestion des modèles avec MLflow.
-- **static** : Dossier dédié aux images
-- **app.py** : Interface Streamlit pour la visualisation interactive des données médicales (optionnel).
-- **docker-compose.yml** : Configuration Docker pour déployer l'application.
+## ⚙️ Lancer le projet en local avec Docker
 
+### 1. Prérequis
 
-## Déploiement
+- [Docker](https://www.docker.com/) installé
+- `mlruns/` contient le modèle MLflow entraîné
+- Structure du projet :
 
-### Prérequis
-- Docker 20+
-- Docker-Compose 1.29+
+```
 
-### Lancer l'application
+Prediction\_des\_Maladies\_et\_Proposition\_de\_Traitement/
+├── main.py
+├── docker/
+│   └── Dockerfile
+├── docker-compose.yml
+├── mlruns/
+│   └── ... (fichiers du modèle)
+
+````
+
+### 2. Démarrer le projet
+
 ```bash
-git clone https://github.com/votreuser/HealthPredict.git
-cd HealthPredict
-docker-compose up --build
+docker compose up --build
+````
 
+L'API sera accessible sur : [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## Installation
+---
 
-### Avec Docker (Recommandé)
+## 🧪 Exemple de requête (via Postman ou curl)
 
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/votre_utilisateur/healthpredict.git
-   cd healthpredict
+### POST `/predi`
+
+**Headers** :
+
+```http
+Content-Type: application/json
+```
+
+**Body JSON** :
+
+```json
+{
+  "Temperature": 36.6,
+  "Pulse": 72,
+  "BloodPressure": 120,
+  "SpO2": 98,
+  "RespiratoryRate": 16,
+  "BMI": 22.5,
+  "FastingGlucose": 90,
+  "Cholesterol": 180,
+  "StressLevel": 3.5
+}
+```
+
+**Réponse JSON** :
+
+```json
+{
+  "Diagnostic": "Le patient souffre de la Grippe."
+}
+```
+
+---
+
+## 📦 Fonctionnalités futures (roadmap)
+
+* 🔬 Intégration de modèles Deep Learning.
+* 🧾 Génération automatique de recommandations thérapeutiques.
+* 📊 Dashboard de visualisation Streamlit.
+* 🔐 Sécurisation de l’API (authentification, rate limiting).
+* 🌍 Déploiement sur le cloud (Render, Azure, etc.).
+
+---
+
+## 👨‍💻 Auteur
+
+**Abdias Arsène** – *IT Consultant in Innovative Technologies*
+💼 Santé | Humanitaire | IA | NLP | Web Apps
+🔗 LinkedIn : [Abdias Arsène.Z✅✅](https://www.linkedin.com/in/abdias-arsene)
+📧 E-mail : abdiasarsene@gmail.com
+
+---
+
+## 📝 Licence
+
+Ce projet est sous licence **MIT**.
+Libre à vous de l'utiliser, le modifier ou le distribuer, en citant l’auteur original.

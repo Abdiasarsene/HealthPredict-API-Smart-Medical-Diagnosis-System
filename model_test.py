@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score, f1_score, recall_score
 import mlflow
 import mlflow.sklearn
+from mlflow.tracking import MlflowClient    
 
 # Importation de la base de données traitée
 data_treated = pd.read_excel(r'D:\Projects\IT\Data Science & IA\Prediction_des_Maladies_et_Proposition_de_Traitement\explore\data\data_health_treated.xlsx')
@@ -101,13 +102,24 @@ def mlflow_log(model, x_test, y_test, model_name):
             mlflow.log_metric('accuracy', acc)
             mlflow.log_metric('f1_score', f1)
             mlflow.log_metric('recall', rec)
+            
+            # Log modèle dans le régistre
             mlflow.sklearn.log_model(model.best_estimator_, model_name)
-
-        print(f"\n⚙️ Performance {model_name}:")
-        print(f"✅ Best params: {model.best_params_}")
-        print(f"✅ Accuracy = {acc:.4f}")
-        print(f"✅ F1 Score = {f1:.4f}")
-        print(f"✅ Recall = {rec:.4f}")
+            
+            # Enregistrement dans le Model Registry
+            model_uri = f"runs:/{mlflow.active_run().info.run_id}/{model_name}"
+            result = mlflow.register_model(model_uri=model_uri, name=model_name)
+            print('Model enregistrée dans Model Registry avec succès ✅✅')
+            
+            # (Facultatif) Promotion automatique en Production
+            client = MlflowClient()
+            client.transition_model_version_stage(
+            name=model_name,
+            version=result.version,
+            stage="Production",  # ou "Staging" si tu préfères
+            archive_existing_versions=True
+            )
+            
         print(f"✅ {model_name} enregistré avec succès dans MLflow\n")
         
     except Exception as e:

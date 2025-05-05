@@ -3,15 +3,15 @@ from pydantic import BaseModel
 import mlflow.sklearn
 import pandas as pd
 from typing import Dict
+from database import insert_patient_data
 
 app = FastAPI(
     title="Health Predict App",
     description="Prédiction des maladies à partir des données médicales."
 )
 
-model_uri = "mlruns/785681529560409716/3a8daef69e284135ad68e38d7d2e3949/artifacts/Logistic_Regression"
-model = mlflow.sklearn.load_model(model_uri)
-print("Modèle Logistic Regression chargé avec succès ✅")
+model = mlflow.pyfunc.load_model("models:/Logistic_Regression/Production")
+print("Modèle Regression Logistique chargé avec succès ✅")
 
 class PatientsData(BaseModel):
     Temperature : float
@@ -24,6 +24,12 @@ class PatientsData(BaseModel):
     Cholesterol : float
     StressLevel : float
 
+# Initialisation de l'application
+@app.get("/")
+def read_root():
+    return {"message": "Bienvenue sur l'API HealthPredict"}
+
+# Début de prédiction
 @app.post("/predi")
 def predict_diagnosis(data: PatientsData):
     try:
@@ -37,7 +43,7 @@ def predict_diagnosis(data: PatientsData):
             'FastingGlucose': data.FastingGlucose,
             'Cholesterol': data.Cholesterol,
             'StressLevel': data.StressLevel
-        }])
+        }]).values
 
         # Prédiction
         prediction = model.predict(input_data)
@@ -55,6 +61,9 @@ def predict_diagnosis(data: PatientsData):
         # Message lisible pour l'utilisateur
         message = f"Le patient souffre de {diagnosis_mapping.get(predicted_class, 'une maladie inconnue')}."
 
+        # Enregistrer dans la base de données
+        insert_patient_data(data, message)
+        
         return {"Diagnostic": message}
 
     except Exception as e:

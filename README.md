@@ -9,6 +9,7 @@ Ce projet propose une **API intelligente** construite avec **FastAPI** pour **pr
 - Faciliter le déploiement grâce à Docker et docker-compose.
 - Préparer une base pour intégrer à terme des recommandations de traitement.
 
+![Postamn](./postmancapture.png)
 ---
 
 ## 🧠 Modèle utilisé

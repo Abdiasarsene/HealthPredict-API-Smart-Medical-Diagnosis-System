@@ -119,7 +119,6 @@ def mlflow_log(model, x_test, y_test, model_name):
             stage="Production",  # ou "Staging" si tu préfères
             archive_existing_versions=True
             )
-            
         print(f"✅ {model_name} enregistré avec succès dans MLflow\n")
         
     except Exception as e:

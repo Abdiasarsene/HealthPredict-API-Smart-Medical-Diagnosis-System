@@ -9,7 +9,7 @@ Ce projet propose une **API intelligente** construite avec **FastAPI** pour **pr
 - Faciliter le déploiement grâce à Docker et docker-compose.
 - Préparer une base pour intégrer à terme des recommandations de traitement.
 
-![Postamn](./postmancapture.png)
+![Postamn](./static/postmancapture.png)
 ---
 
 ## 🧠 Modèle utilisé
@@ -20,110 +20,55 @@ Ce projet propose une **API intelligente** construite avec **FastAPI** pour **pr
 
 ---
 
-## 📊 Données d'entrée attendues
-
-L'API reçoit les données suivantes au format JSON :
-
-| Champ              | Type    | Description                          |
-|--------------------|---------|--------------------------------------|
-| `Temperature`       | float   | Température corporelle (°C)          |
-| `Pulse`             | float   | Pouls (battements/minute)            |
-| `BloodPressure`     | float   | Pression artérielle (mmHg)           |
-| `SpO2`              | float   | Saturation en oxygène (%)            |
-| `RespiratoryRate`   | float   | Fréquence respiratoire               |
-| `BMI`               | float   | Indice de Masse Corporelle           |
-| `FastingGlucose`    | float   | Glycémie à jeun (mg/dL)              |
-| `Cholesterol`       | float   | Taux de cholestérol (mg/dL)          |
-| `StressLevel`       | float   | Niveau de stress (échelle de 0 à 10) |
-
----
-
-## ⚙️ Lancer le projet en local avec Docker
-
-### 1. Prérequis
-
-- [Docker](https://www.docker.com/) installé
-- `mlruns/` contient le modèle MLflow entraîné
-- Structure du projet :
+## ⚙️ Structure du projet
 
 ```
 
-Prediction\_des\_Maladies\_et\_Proposition\_de\_Traitement/
-├── main.py
-├── docker/
+📁 Prediction\_des\_Maladies\_et\_Proposition\_de\_Traitement/
+├── 📂 app/
+|-- |-- __init__.py
+|-- |-- database.py
+|-- |-- main.py
+|-- |-- model.py
+|-- 📂 database/
+|-- |-- patient_data.sql
+├── 📂 docker/
 │   └── Dockerfile
+|-- 📂 notebooks/
+|-- |-- __init__.py
+|-- |-- features_selected.ipynb
+|-- |-- eda.ipynb
+|-- |-- models.ipynb
+|-- |-- main.ipynb
+|-- 📂 static/
+|-- |-- numerous of images saved
 ├── docker-compose.yml
-├── mlruns/
+├── 📂 mlruns/
 │   └── ... (fichiers du modèle)
+├── __init__.py
+├── .gitignore
+├── docker-compose.yml
+├── README.md
+├── requirements.txt
 
 ````
-
-### 2. Démarrer le projet
-
-```bash
-docker compose up --build
-````
-
-L'API sera accessible sur : [http://localhost:8000/docs](http://localhost:8000/docs)
-
 ---
 
-## 🧪 Exemple de requête (via Postman ou curl)
+## 📦 Fonctionnalités 
 
-### POST `/predi`
-
-**Headers** :
-
-```http
-Content-Type: application/json
-```
-
-**Body JSON** :
-
-```json
-{
-  "Temperature": 36.6,
-  "Pulse": 72,
-  "BloodPressure": 120,
-  "SpO2": 98,
-  "RespiratoryRate": 16,
-  "BMI": 22.5,
-  "FastingGlucose": 90,
-  "Cholesterol": 180,
-  "StressLevel": 3.5
-}
-```
-
-**Réponse JSON** :
-
-```json
-{
-  "Diagnostic": "Le patient souffre de l'Asthme."
-}
-```
-
----
-
-## 📦 Fonctionnalités futures (roadmap)
-
-* 🔬 Intégration de modèles Deep Learning.
+* 🔬 Intégration de modèles : Forêt Aléatoire, Regression Logistique, SVM, XGBoost.
 * 🧾 Génération automatique de recommandations thérapeutiques.
-* 📊 Dashboard de visualisation Streamlit.
-* 🔐 Sécurisation de l’API (authentification, rate limiting).
-* 🌍 Déploiement sur le cloud (Render, Azure, etc.).
+* 📊 Containerisation avec Dokcer.
+* 🔐 Sécurisation de l’API avec FastAPI (authentification, rate limiting).
+* 🌍 Intégration Continue/Déploiement Continu/Réentraînement Annuel
+
+![Postamn](./static/mlflow.png)
 
 ---
 
 ## 👨‍💻 Auteur
 
 **Abdias Arsène** – *IT Consultant in Innovative Technologies*
-💼 Santé | Humanitaire | IA | NLP | Web Apps
-🔗 LinkedIn : [Abdias Arsène.Z✅✅](https://www.linkedin.com/in/abdias-arsene)
-📧 E-mail : abdiasarsene@gmail.com
-
----
-
-## 📝 Licence
-
-Ce projet est sous licence **MIT**.
-Libre à vous de l'utiliser, le modifier ou le distribuer, en citant l’auteur original.
+* 💼 Santé | Humanitaire | IA | NLP | Web Apps
+* 🔗 LinkedIn : [Abdias Arsène.Z✅✅](https://www.linkedin.com/in/abdias-arsene)
+* 📧 E-mail : abdiasarsene@gmail.com

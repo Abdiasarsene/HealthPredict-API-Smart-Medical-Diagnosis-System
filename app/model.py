@@ -1,62 +1,68 @@
 # Importation des bibliothèques nécessaires
+import os
+import mlflow
+import warnings
 import numpy as np
 import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from scipy.stats.mstats import winsorize
-from sklearn.preprocessing import MinMaxScaler, LabelEncoder, OneHotEncoder, FunctionTransformer
-from sklearn.compose import ColumnTransformer
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, StratifiedKFold
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from xgboost import XGBClassifier
-import warnings
-from sklearn.metrics import recall_score, f1_score, accuracy_score
-import mlflow
 import mlflow.sklearn
+from dotenv import load_dotenv
+from sklearn.pipeline import Pipeline
 from mlflow.tracking import MlflowClient
+from sklearn.impute import SimpleImputer
+from scipy.stats.mstats import winsorize
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import recall_score, f1_score, accuracy_score
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, StratifiedKFold
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder, OneHotEncoder, FunctionTransformer
+
+# ===== VARIABLE D'ENVIRONNEMENT ======
+load_dotenv()
 
 # ====== GESTION DES AVERTISSEMENTS EN MODE SILENCIEUX ======
 warnings.filterwarnings('ignore')
 
 # ====== IMPORTATION DU JEU DE DONNES ======
-data = pd.read_excel(r"../Prediction_des_Maladies_et_Proposition_de_Traitement/datasets/newDataClinic.xlsx")
+# Charger la variable d'environnement 
+dataset_path = os.getenv("DATASET_PATH")
+
+# Importer le jeu de données
+data = pd.read_excel(dataset_path)
 print("Jeu de données importé ✅✅")
 
-# ====== PRETRAITEMENT DES DONNEES ======
-print("Début du prétraitement✅✅")
-
-# Séparer les features du target
+# ====== PREPARATION DES DONNEES ======
 x = data.drop(columns=['Diagnostique', 'Traitement'])
 y = data["Diagnostique"]
 
-# Encoder la cible
+# ====== ENCODAGE DU LABEL ======
 label = LabelEncoder()
 y = label.fit_transform(y)
 
-# Diviser les données en training et test
+# ====== DIVISION DES DONNEES EN ENTRAINEMENT ET DE TEST ======
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=42, test_size=0.2)
 
-# Détecter les types de données
+# ====== SEPARATION DES TYPES DE DONNEES ======
 features = data.drop(columns=['Traitement', 'Diagnostique'])
 num_col = features.select_dtypes(include=['int64', 'float64']).columns.tolist()
 cat_col = features.select_dtypes(include=["object"]).columns.tolist()
 
-# Fonction pour la gestion des valeurs abérrantes
+# ====== GESTION DES VALEURS ABERRANTES ======
 def winsorize_transform(X):
     X_winsorized = np.copy(X)
     for i in range(X.shape[1]):
         X_winsorized[:,1] = winsorize(X[:,1], limits=[0.05,0.05])
     return  X_winsorized
 
-# Prétraitement des données
+# ====== PRETRAITEMENT DES DONNEES ======
+# Colonne numerique
 num_transformer = Pipeline([
     ('imputer', SimpleImputer(strategy='constant', fill_value=-1)),
     ("winsorize", FunctionTransformer(winsorize_transform)),
     ('scaler', MinMaxScaler())
 ])
 
+# Colonne catégorielle
 cat_transformer = Pipeline([
     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
     ('oneencoder', OneHotEncoder(handle_unknown='ignore'))
@@ -72,37 +78,26 @@ preprocessor = ColumnTransformer(
 )
 print('Prétraitement terminé✅✅')
 
-# ====== ENTRAINEMENT & PREDICTION ======
-
-# Modèles à entraîner
+# ====== MODELES D'ENTRAPINEMENT ======
 models = {
-    'logistic': LogisticRegression(max_iter=1000, solver='liblinear', class_weight="balanced"),
-    'random_forest': RandomForestClassifier(),
-    'xgboost': XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+    'Logistic-Regression': LogisticRegression(max_iter=1000, solver='liblinear', class_weight="balanced"),
+    'Random-Forest': RandomForestClassifier(random_state=42),
 }
 
-# Hyperparamètres pour RandomizedSearchCV
+# ====== HYPERPARAMETRE AVEC RANDOMIZEDSEARCHGRID ======
 param_dist = {
-    "logistic": {
+    "Logistic-Regression": {
         "classifier__C": [0.1, 1, 10],
         "classifier__penalty": ["l1", "l2"]
     },
-    "random_forest": {
+    "Random-Forest": {
         "classifier__n_estimators": [100, 200, 300],
         "classifier__max_depth": [3, 6, 10],
         "classifier__min_samples_split": [2, 5, 10]
     },
-    "xgboost": {
-        "classifier__learning_rate": [0.01, 0.05, 0.1, 0.2],
-        "classifier__n_estimators": [100, 200, 300],
-        "classifier__max_depth": [3, 6, 10],
-        "classifier__subsample": [0.7, 0.8, 0.9],
-        "classifier__colsample_bytree": [0.7, 0.8, 1],
-        "classifier__gamma": [0, 0.1, 0.2]
-    }
 }
 
-# Entraînement avec RandomizedSearchCV
+# ====== ENTRAINEMENT DES MODELES ======
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 best_models = {}
 
@@ -126,8 +121,14 @@ for name, model in models.items():
     
     random_search.fit(x_train, y_train)
     best_models[name] = random_search.best_estimator_
+print("Entraînement des modèles terminées ✅✅")
 
-# ====== FONCTION DE LOG DANS MLFLOW  ======
+# ====== CREATION D'EXPERIENCE AVEC MLFLOW  ======
+experiment_name = os.getenv("MLFLOW_EXPERIMENT_NAME")
+mlflow.set_experiment(experiment_name)
+print("Experience avec MLflow créée ✅✅")
+
+# ====== FONCTION DE LOG DANS MLFLOW ======
 def mlflow_log(model, x_test, y_test, model_name):
     try:
         # Prédiction et calcul des métriques
@@ -139,15 +140,23 @@ def mlflow_log(model, x_test, y_test, model_name):
         with mlflow.start_run(run_name=model_name):
             # Log des paramètres et des métriques
             mlflow.log_param('model_type', model_name)
-            params = {k: v for k, v in model.get_params().items() if k.startswith("classifier__")}
-            mlflow.log_params(params)
+            
+            # log des paramètres
+            try:
+                mlflow.log_params(model.get_params())
+            except Exception as e : 
+                print(f"⚠️ Impossible de loguer les paramètres  pour {model_name}")
+            
             # mlflow.log_params(model.get_params())
             mlflow.log_metric('accuracy', acc)
             mlflow.log_metric('f1_score', f1)
             mlflow.log_metric('recall', rec)
             
             # Log du modèle dans MLflow
-            mlflow.sklearn.log_model(model, model_name)
+            try: 
+                mlflow.sklearn.log_model(model, model_name)
+            except Exception as e : 
+                print(f"⚠️ Erreur lors du log du modèle {model_name} : {e}")
             
             # Enregistrement dans le Model Registry
             model_uri = f"runs:/{mlflow.active_run().info.run_id}/{model_name}"

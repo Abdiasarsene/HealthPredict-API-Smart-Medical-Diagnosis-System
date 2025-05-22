@@ -1,5 +1,9 @@
 # Dossiers à exclure
-datastets
+datasets/
 mlruns/
 models/
 script/
+.env
+__pycache__/
+
+.vscode/

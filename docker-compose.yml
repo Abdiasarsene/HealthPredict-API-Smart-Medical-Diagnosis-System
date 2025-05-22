@@ -10,3 +10,4 @@ services:
       - .:/app
     environment:
       - MLFLOW_TRACKING_URI=file:/app/mlruns
+    restart: unless-stopped

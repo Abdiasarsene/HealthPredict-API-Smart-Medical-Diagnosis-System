@@ -1,5 +1,5 @@
 # Dossiers à exclure
-datasets/
+data/
 mlruns/
 models/
 script/

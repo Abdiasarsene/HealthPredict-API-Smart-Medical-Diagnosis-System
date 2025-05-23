@@ -1,0 +1,6 @@
+[('num', Pipeline(steps=[('imputer', SimpleImputer(fill_value=-1, strategy='constant')),
+                ('winsorize',
+                 FunctionTransformer(func=<function winsorize_transform at 0x00000257D5D8BD80>)),
+                ('scaler', MinMaxScaler())]), ['Temperature', 'Pulse', 'BloodPressure', 'SpO2', 'RespiratoryRate', 'BMI', 'FastingGlucose', 'Cholesterol', 'StressLevel']), ('cat', Pipeline(steps=[('imputer',
+                 SimpleImputer(fill_value='missing', strategy='constant')),
+                ('oneencoder', OneHotEncoder(handle_unknown='ignore'))]), ['Fatigue_intense', 'Frissons', 'Perte_gout_odorat', 'Toux_seche'])]

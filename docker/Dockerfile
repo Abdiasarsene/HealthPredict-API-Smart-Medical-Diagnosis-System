@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Étape 5 : Installer les dépendances Python
 RUN pip install --upgrade pip \
-    && pip install -default-timeout=100 --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir --timeout=100 -r requirements.txt
 
 # Etape 6 : Copier le reste du code après l'installation
 COPY . . 

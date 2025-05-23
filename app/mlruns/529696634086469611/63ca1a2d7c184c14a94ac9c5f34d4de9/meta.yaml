@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Projects/IT/Data%20Science%20%26%20IA/Prediction_des_Maladies_et_Proposition_de_Traitement/app/mlruns/529696634086469611/63ca1a2d7c184c14a94ac9c5f34d4de9/artifacts
+end_time: 1747748064497
+entry_point_name: ''
+experiment_id: '529696634086469611'
+lifecycle_stage: active
+run_id: 63ca1a2d7c184c14a94ac9c5f34d4de9
+run_name: Random-Forest
+run_uuid: 63ca1a2d7c184c14a94ac9c5f34d4de9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747748057643
+status: 3
+tags: []
+user_id: hp

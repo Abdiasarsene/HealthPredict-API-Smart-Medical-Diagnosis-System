@@ -1,6 +1,5 @@
 # Dossiers à exclure
 data/
-mlruns/
 models/
 script/
 .env

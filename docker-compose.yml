@@ -1,13 +1,60 @@
 services:
+# ====== API ======
   healthpredict:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile  # <-- chemin vers le Dockerfile
-    container_name: health_predict_api
+      dockerfile: ${PATH_DOCKERFILE}
+    container_name: ${CONTAINER_NAME}
     ports:
-      - "8000:8000"
+      - ${APP_PORT}
+    environment:
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - MLFLOW_EXPERIMENT_NAME=${MLFLOW_EXPERIMENT_NAME}
+      - MODEL_NAME=${MODEL_NAME}
+      - MODEL_VERSION=${MODEL_VERSION}
+      - API_TITLE=${API_TITLE}
+      - API_DESCRIPTION=${API_DESCRIPTION}
+      - API_VERSION=${API_VERSION}
+      - DATABASE_SQLITE=${DATABASE_SQLITE}
+    volumes:
+      - ${DATABASE_SQLITE} ./api/database:/api/database
+    restart: unless-stopped
+
+# ====== PROMETHEUS =====
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports : 
+      - ${PORT_PROMETHEUS}
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  
+# ====== GRAFANA ======
+  grafana:
+      image: grafana/grafana:latest
+      container_name: grafana
+      ports:
+        - "${PORT_GRAFANA}"
+      environment:
+        - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+        - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      volumes:
+        - grafana-storage:/var/lib/grafana
+      depends_on:
+        - prometheus
+
+# ====== MONITORING ======
+  monitoring:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitoring
+    container_name: monitoring
+    depends_on:
+      - healthpredict
+    ports:
+      - "8001:8001"
     volumes:
       - .:/app
-    environment:
-      - MLFLOW_TRACKING_URI=file:/app/mlruns
     restart: unless-stopped
+
+

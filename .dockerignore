@@ -1,3 +1,7 @@
 .git
 .gitignore
 README.md
+.github
+Dockerfile
+docker-compose.yml
+database/*.db

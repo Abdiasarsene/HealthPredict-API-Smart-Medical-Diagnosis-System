@@ -1,0 +1,13 @@
+global:
+  scrape_interval: "15s"
+
+# ====== API FASTAPI ======
+scrape_configs:
+  - job_name: "PredictiveDiagnosis"
+    static_configs:
+      - targets:['localhost: 8000']
+
+# ====== CONTAINER DU SCRIPT MONITORING ======
+  - job_name: "predictive_monitoring"
+    static_configs : 
+      - targets: ["monitoring:8001"]

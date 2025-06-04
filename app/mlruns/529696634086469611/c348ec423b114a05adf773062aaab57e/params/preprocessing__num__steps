@@ -1,1 +1,0 @@
-[('imputer', SimpleImputer(fill_value=-1, strategy='constant')), ('winsorize', FunctionTransformer(func=<function winsorize_transform at 0x00000257D5D8BD80>)), ('scaler', MinMaxScaler())]

@@ -1,4 +1,4 @@
-# 🎯 HealthPredict — AI-Powered Disease and Treatment Prediction API
+# 🎯 HealthPredict — API Prédictive des Maladies et des Traitements adéquats aux Patients
 
 HealthPredict est une API robuste et modulaire, conçue pour prédire automatiquement des diagnostics médicaux et recommander des traitements adaptés à partir de données cliniques.
 Ce projet illustre une intégration avancée de pipelines ML avec MLflow et BentoML, assurant un déploiement scalable et un fallback intelligent entre modèles.

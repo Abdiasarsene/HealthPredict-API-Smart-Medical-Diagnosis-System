@@ -1,7 +1,30 @@
+# Fichier
 .git
-.gitignore
+.dvcignore
+.pre-commit-config.yaml
+.ruff.toml
+data.dvc
+Jenkinsfile
+Makefile
+mlflow.db
+mypy.ini
 README.md
-.github
-Dockerfile
-docker-compose.yml
-database/*.db
+requirements.txt
+runner.py
+Taskfile.yaml
+
+# Dossiers
+__pycache__/
+.dvc/
+.pytest_cache/
+.ruff_cache/
+architecture/
+data/
+mlartifacts/
+mlruns/
+notebook/
+others/
+static/
+tests/
+trainer_diagnosis/
+trainer_treatment/

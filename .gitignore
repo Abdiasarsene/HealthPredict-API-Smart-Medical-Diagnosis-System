@@ -2,9 +2,18 @@
 data/
 models/
 script/
-.env
+database/
 __pycache__/
 others/
 .vscode/
 .pytest_cache/
-notebook/
+mlruns/
+mlartifacts/
+.ruff_cache/
+
+# Fichiers
+.env
+mlflow.db
+.env.local
+.env.docker
+.env.treat

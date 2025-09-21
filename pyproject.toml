@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "ChurnPredictionServer"
+version = "0.1.0"
+description = "Project carried out with MLflow + BentoML(fallback) + Docker + Jenkins"
+authors = ["Abdias Arsène <abdiasarsene@email.com>"]
+readme = "README.md"
+packages = [{ include = "ChurnPrediction_API" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "*"
+scikit-learn = "*"
+mlflow = "*"
+bentoml= "*"
+fastapi="*"
+mlflow_skinny="*"
+prometheus_client="*"
+prometheus_fastapi_instrumentator="*"
+pydantic="*"
+python-dotenv="*"
+scikit_learn="*"
+starlette="*"
+ray="*"
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.1"
+pre-commit = "^3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

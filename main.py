@@ -1,33 +1,42 @@
-# main.py
-import uvicorn
+# app/main.py
+import logging
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.config_api import settings
-from app.routes.routes import router as prediction_router
-from app.monitor import set_metrics
 
-# === Création de l'application ===
-app = FastAPI(
-    title=settings.API_TITLE,
-    version=settings.API_VERSION,
-    description=settings.API_DESCRIPTION
-)
+from app.routers.route import router as api_router
+from app.monitor import add_monitoring, metrics_middleware
+from app.secure import apply_security_middleware
+from app.config import settings
+from app.events.events_pipeline import register_startup_events
 
-# === Middleware CORS (utile pour intégration avec front Django/React) ===
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # À restreindre si tu connais le domaine frontend
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# ====== LOGGING ======
+logging.basicConfig(level=logging.INFO,)
+logger = logging.getLogger("medical_orchestrator")
 
-# === Monitoring Prometheus ===
-set_metrics(app)
 
-# === Enregistrement des routes ===
-app.include_router(prediction_router)
+# ====== FASTAPI APP ======
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title= settings.api_title,
+        description=settings.api_description,
+        version=settings.api_version
+    )
 
-# === Lancement direct ===
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    # ===== Security Middleware (CORS, TrustedHost) =====
+    apply_security_middleware(app)
+    
+    #  ===== Monitoring (Prometheus + Middleware) ======
+    add_monitoring(app)
+    app.middleware("http")(metrics_middleware)
+    
+    # ===== Startup : Chargement des Modèles
+    register_startup_events(app)
+
+    # ===== Include API routes =====
+    app.include_router(api_router)
+    
+    logger.info("✅ FastAPI APP Created and Configured")
+    return app
+
+
+# ===== INSTANCE =====
+app = create_app()

@@ -13,11 +13,11 @@ default: radon bandit format mypy
 
 # ====== LANCEMENT DU TEST DE L'API ======
 schema:
-	@echo "Valider les données d'entrée"
-	@python $(TEST_DIR)/schema_test.py
+	@echo "Valider input data"
+	@python -m $(TEST_DIR).schema_test.py
 
 # ======= LANCEMENT DU PIPELINE DU MODELE ======
-train:
+runner1:
 	@echo "Lancement du pipeline entrainement"
 	@python runner.py
 
@@ -31,9 +31,16 @@ mlflow:
 	@echo "Connexion a MLflow"
 	@mlflow ui 
 
+# ====== LANCEMENT DE RAY SERVE ======
+ray:
+	@echo "Arreter Ray Cluster older"
+	@ray stop || true
+	@echo "Lancer nouveau"
+	@ray start --head --node-ip-address=127.0.0.1
+
 # ====== LANCEMENT DE L'API ======
 app:
-	@echo "Lancement de HealthPredict API"
+	@echo "Lancer HealthPredict API"
 	@uvicorn main:app --reload --port 8000 --workers 1
 
 # ====== ANALYSE CYCLO =======
@@ -57,7 +64,7 @@ features:
 	@py $(NOTEBOOK)/selection_features.py
 
 # ====== MODELS TREATMENT =====
-model:
+runner2:
 	@echo "Modele de traitement"
 	@python model.py
 

@@ -1,0 +1,46 @@
+{
+    "categoricals": {
+        "Fievre": [
+            "Présent",
+            "Absent"
+        ]
+    },
+    "numericals": {
+        "Temperature": {
+            "min": 33.91,
+            "max": 40.51
+        },
+        "Pulse": {
+            "min": 34.83,
+            "max": 97.36
+        },
+        "BloodPressure": {
+            "min": 81.01,
+            "max": 162.54
+        },
+        "SpO2": {
+            "min": 90.0,
+            "max": 99.99
+        },
+        "RespiratoryRate": {
+            "min": 12.0,
+            "max": 20.0
+        },
+        "BMI": {
+            "min": 18.02,
+            "max": 34.97
+        },
+        "FastingGlucose": {
+            "min": 70.09,
+            "max": 139.96
+        },
+        "Cholesterol": {
+            "min": 150.04,
+            "max": 249.7
+        },
+        "StressLevel": {
+            "min": 1.01,
+            "max": 10.0
+        }
+    }
+}

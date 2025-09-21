@@ -53,6 +53,42 @@
 
 ![API Predictive](./statics/postman.png)
 
+<div style="display: flex; gap: 20px;">
+
+<div style="flex: 1;">
+**Input Example**
+<pre>
+{
+  "Fievre": "Présent",
+  "Temperature": 30.2,
+  "Pulse": 32.0,
+  "BloodPressure": 120.0,
+  "SpO2": 96.5,
+  "RespiratoryRate": 16.0,
+  "BMI": 24.5,
+  "FastingGlucose": 78.0,
+  "Cholesterol": 200.0,
+  "StressLevel": 5.0
+}
+</pre>
+</div>
+
+<div style="flex: 1;">
+**Output Example**
+<pre>
+{
+    "⏲️ Timestamp": "2025-09-21T22:27:25.599414",
+    "🔃 Model Used": "Unknown",
+    "📊 Latency_ms": 57.01,
+    "🤒 Diagnosis": "Asthme",
+    "💊 Treatment": "Médicament",
+    "👨‍⚕️ Examination Report": "L'examen clinique et les données analysées indiquent que vous souffrez de 🩺: Asthme. Sur la base de ce constat, et en tenant compte d'autres facteurs médicaux pertinents, nous vous recommandons le traitement suivant 💊: Médicament. Veuillez consulter un médecin pour un suivi adapté et une confirmation clinique."
+}
+</pre>
+</div>
+
+</div>
+
 ---
 
 ## 📊 Monitoring
